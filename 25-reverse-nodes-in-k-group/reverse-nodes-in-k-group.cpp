@@ -11,38 +11,33 @@
 class Solution {
 public:
     ListNode* reverseKGroup(ListNode* head, int k) {
-        // Base case: if head is NULL, return NULL
-        if(head == NULL) {
-            return NULL;
-        }
 
-        // Check if there are at least k nodes to reverse
-        ListNode* check = head;
-        for (int i = 0; i < k; ++i) {
-            if (!check) return head; 
-            check = check->next;
-        }
+        if(head==nullptr || k==1) return head;
+        ListNode* dummy = new ListNode(0);
+        dummy->next=head;
 
-        // Reverse the k-group
-        ListNode* next = NULL;
-        ListNode* curr = head;
-        ListNode* prev = NULL;
-        int cnt = 0;
-
-        while(curr != NULL && cnt < k) {
-            next = curr->next;
-            curr->next = prev;
-            prev = curr;
-            curr = next;
+        ListNode* curr=dummy, *pre=dummy, *nex=dummy;        
+        
+        int cnt =0;
+        while(curr->next){
             cnt++;
+            curr=curr->next;
         }
 
-        // Recursively reverse the next groups and attach them
-        if(next != NULL) {
-            head->next = reverseKGroup(next, k);
+
+        while(cnt>=k){
+            curr=pre->next;
+            nex=curr->next;
+            for(int i =1;i<k;i++){
+                curr->next=nex->next;
+                nex->next=pre->next;
+                pre->next=nex;
+                nex=curr->next;
+            }
+            pre=curr;
+            cnt-=k;
         }
 
-        // Return the new head of the reversed list
-        return prev;
+        return dummy->next;
     }
 };
