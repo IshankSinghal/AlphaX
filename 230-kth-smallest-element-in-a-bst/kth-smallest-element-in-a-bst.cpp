@@ -1,22 +1,38 @@
-// INORDER TRAVERSAL with EXTRA SPACE:
-
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
+ * };
+ */
 class Solution {
 public:
-    // Function to perform inorder traversal and collect values in the array
-    void inorder(TreeNode* root, vector<int> &arr) {
-        if (root == NULL) {
-            return; // Return immediately if the current node is NULL
+    // Helper function to find the k-th smallest element
+    int solve(TreeNode* root, int &i, int k) {
+        if (root == NULL) return -1; // Base case: if node is NULL, return -1
+
+        // Search in the left subtree
+        int left = solve(root->left, i, k);
+        if (left != -1) { // If k-th smallest is found in left subtree, return it
+            return left;
         }
 
-        inorder(root->left, arr);  // Traverse the left subtree
-        arr.push_back(root->val); // Store the current node's value
-        inorder(root->right, arr); // Traverse the right subtree
+        // Increment the counter for the current node
+        i++;
+        if (i == k) return root->val; // If current node is the k-th smallest, return its value
+
+        // Search in the right subtree
+        return solve(root->right, i, k);
     }
 
-    // Function to find the k-th smallest element in the BST
+    // Main function to find the k-th smallest element
     int kthSmallest(TreeNode* root, int k) {
-        vector<int> arr; // Array to store elements in sorted order
-        inorder(root, arr); // Perform inorder traversal
-        return arr[k-1]; // Return the k-th smallest element
+        int i = 0; // Counter for tracking the current element's rank
+        return solve(root, i, k); // Call the helper function
     }
 };
