@@ -12,16 +12,9 @@ public:
                 return -1;
         }
 
-        int i = 0;
-        int j = size;
-
-        while (i+j <= haystack.length()) {
-            cout<<haystack.substr(i, j)<<endl;
-            cout<<i<<endl<<j<<endl;
-            if (haystack.substr(i, j) == needle) {
+        for (int i = 0; i <= haystack.length() - size; i++) {
+            if (haystack.substr(i, size) == needle)
                 return i;
-            }
-            i++;
         }
         return -1;
     }
